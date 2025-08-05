@@ -1,10 +1,13 @@
 SystemName=SelfReport
 PORT=80
 
-OriginAllowList=https://www.justdrink.com.tw;http://www.justdrink.com.tw;https://finance.justdrink.com.tw;https://www.jhupat.org.tw
+OriginAllowList=https://www.justdrink.com.tw;http://www.justdrink.com.tw;https://finance.justdrink.com.tw;https://www.sinica.edu.tw
 AllowMethods=POST;GET;DELETE;PUT
 
 DocumentRoot=www/html
 TemplateRoot=www/template/
 TempRoot=www/temp
 QRCodePath=temp
+
+uploadDir=/home/pi/epd/pic
+screenFileName=uploadtemp
