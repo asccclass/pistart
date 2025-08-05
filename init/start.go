@@ -7,6 +7,7 @@ import (
    "time"
    "bytes"
    "net/http"
+   "io/ioutil"
    "encoding/json"
    "github.com/joho/godotenv"
 )
@@ -15,7 +16,21 @@ import (
 type Info struct {
    MACAddress string `json:"mac_address"`
    IPAddress  string `json:"ip_address"`
+   ExtIPAddress  string `json:"extip_address"`
    SystemTime string `json:"system_time"`
+}
+
+func getExternalIP()(string) {
+   resp, err := http.Get("https://api.ipify.org")
+   if err != nil {
+      return  err.Error()
+   }
+   defer resp.Body.Close()
+   ip, err := ioutil.ReadAll(resp.Body)
+   if err != nil {
+      return err.Error()
+   }
+   return string(ip)
 }
 
 func getMACAndIP() (macAddr, ipAddr string) {
@@ -60,7 +75,7 @@ func getMACAndIP() (macAddr, ipAddr string) {
 }
 
 func main() {
-   if err := godotenv.Load("envfile"); err != nil {
+   if err := godotenv.Load(".envfile"); err != nil {
       fmt.Println(err.Error())
       return
    }
@@ -72,10 +87,12 @@ func main() {
    mac, ip := getMACAndIP()
    // 取得當前系統時間並格式化
    now := time.Now().Format("2006-01-02 15:04:05")
+   extIP := getExternalIP()
 
    info := Info{
       MACAddress: mac,
       IPAddress:  ip,
+      ExtIPAddress: extIP,
       SystemTime: now,
    }
 
